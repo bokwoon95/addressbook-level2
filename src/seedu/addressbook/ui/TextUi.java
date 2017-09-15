@@ -12,9 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import seedu.addressbook.commands.CommandResult;
 import seedu.addressbook.data.person.ReadOnlyPerson;
+import seedu.addressbook.data.person.personToAdd;
 
 /**
  * Text UI of the application.
@@ -38,6 +41,8 @@ public class TextUi {
 
     /** Format of a comment input line. Comment lines are silently consumed when reading user input. */
     private static final String COMMENT_LINE_FORMAT_REGEX = "#.*";
+
+    private static final Pattern fieldAndPrivacyPattern = Pattern.compile("(?<someString>[^/]+)(?<isPrivate>[/p]*)");
 
     private final Scanner in;
     private final PrintStream out;
@@ -167,6 +172,104 @@ public class TextUi {
      */
     private static String getIndexedListItem(int visibleIndex, String listItem) {
         return String.format(MESSAGE_INDEXED_LIST_ITEM, visibleIndex, listItem);
+    }
+
+    public void initializePersonToAdd(personToAdd emptyPerson) {
+        int inputCounter = 0;
+        Boolean continueFlag;
+        String input;
+        System.out.println("NOTE: Enter 'undo' at any time to undo the last entry");
+        while (inputCounter < 5) {
+            continueFlag = false;
+            switch (inputCounter) {
+                case 0:
+                    System.out.print("Enter Name: ");
+                    break;
+                case 1:
+                    System.out.print("Enter Phone Number (append /p to set as private): ");
+                    break;
+                case 2:
+                    System.out.print("Enter Email (append /p to set as private): ");
+                    break;
+                case 3:
+                    System.out.print("Enter Address (append /p to set as private): ");
+                    break;
+                case 4:
+                    System.out.print("Enter tags (separated by commas): ");
+                    break;
+            }
+
+            input = in.nextLine();
+
+            if (input.equals("undo")){
+                switch (inputCounter) {
+                    case 0:
+                        break;
+                    case 1:
+                        continueFlag = true;
+                        emptyPerson.setName("empty");
+                        break;
+                    case 2:
+                        continueFlag = true;
+                        emptyPerson.setPhone("empty");
+                        emptyPerson.setPhonePrivacy(false);
+                        break;
+                    case 3:
+                        continueFlag = true;
+                        emptyPerson.setEmail("empty");
+                        emptyPerson.setEmailPrivacy(false);
+                        break;
+                    case 4:
+                        continueFlag = true;
+                        emptyPerson.setAddress("empty");
+                        emptyPerson.setAddressPrivacy(false);
+                        break;
+                }
+                inputCounter--;
+            }
+
+            if (continueFlag) continue;
+
+            switch (inputCounter) {
+                case 0:
+                    emptyPerson.setName(input);
+                    break;
+                case 1:
+                    Matcher pMatch = fieldAndPrivacyPattern.matcher(input);
+                    if (!pMatch.matches()) {
+                        //throw exception
+                    } else {
+                        emptyPerson.setPhone(pMatch.group("someString"));
+                        emptyPerson.setPhonePrivacy("/p".equals(pMatch.group("isPrivate")));
+                    }
+                    break;
+                case 2:
+                    Matcher eMatch = fieldAndPrivacyPattern.matcher(input);
+                    if (!eMatch.matches()) {
+                        //throw exception
+                    } else {
+                        emptyPerson.setEmail(eMatch.group("someString"));
+                        emptyPerson.setEmailPrivacy("/p".equals(eMatch.group("isPrivate")));
+                    }
+                    break;
+                case 3:
+                    Matcher aMatch = fieldAndPrivacyPattern.matcher(input);
+                    if (!aMatch.matches()) {
+                        //throw exception
+                    } else {
+                        emptyPerson.setAddress(aMatch.group("someString"));
+                        emptyPerson.setAddressPrivacy("/p".equals(aMatch.group("isPrivate")));
+                    }
+                    break;
+                case 4:
+                    if (input.isEmpty()) break;
+                    for (String onetag: input.split(",")) {
+                        emptyPerson.addTag(onetag);
+                    }
+                    break;
+            }
+            inputCounter++;
+        }
     }
 
 }
