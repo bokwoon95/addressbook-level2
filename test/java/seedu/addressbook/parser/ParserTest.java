@@ -32,6 +32,7 @@ import seedu.addressbook.data.person.Phone;
 import seedu.addressbook.data.person.ReadOnlyPerson;
 import seedu.addressbook.data.tag.Tag;
 import seedu.addressbook.data.tag.UniqueTagList;
+import seedu.addressbook.ui.TextUi;
 
 public class ParserTest {
 
@@ -39,7 +40,7 @@ public class ParserTest {
 
     @Before
     public void setUp() {
-        parser = new Parser();
+        parser = new Parser(new TextUi());
     }
 
     /*
