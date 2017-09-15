@@ -177,29 +177,37 @@ public class TextUi {
     public void initializePersonToAdd(personToAdd emptyPerson) {
         int inputCounter = 0;
         Boolean continueFlag;
-        String input;
-        System.out.println("NOTE: Enter 'undo' at any time to undo the last entry");
+        String input = "tempStringForDebugging";
+        out.println(LINE_PREFIX + "NOTE: Enter 'undo' at any time to undo the last entry");
         while (inputCounter < 5) {
             continueFlag = false;
             switch (inputCounter) {
                 case 0:
-                    System.out.print("Enter Name: ");
+                    out.print(LINE_PREFIX + "Enter Name: ");
                     break;
                 case 1:
-                    System.out.print("Enter Phone Number (append /p to set as private): ");
+                    out.print(LINE_PREFIX + "Enter Phone Number (append /p to set as private): ");
                     break;
                 case 2:
-                    System.out.print("Enter Email (append /p to set as private): ");
+                    out.print(LINE_PREFIX + "Enter Email (append /p to set as private): ");
                     break;
                 case 3:
-                    System.out.print("Enter Address (append /p to set as private): ");
+                    out.print(LINE_PREFIX + "Enter Address (append /p to set as private): ");
                     break;
                 case 4:
-                    System.out.print("Enter tags (separated by commas): ");
+                    out.print(LINE_PREFIX + "Enter tags (separated by commas): ");
                     break;
             }
 
-            input = in.nextLine();
+            if (in.hasNextLine()) {
+                input = in.nextLine();
+            }
+/*            // silently consume all ignored lines
+            while (shouldIgnore(input)) {
+                input = in.nextLine();
+            }*/
+
+            if (input == null || input.isEmpty()) { continue; }
 
             if (input.equals("undo")){
                 switch (inputCounter) {
