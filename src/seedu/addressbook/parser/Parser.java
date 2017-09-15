@@ -24,6 +24,7 @@ import seedu.addressbook.commands.ViewAllCommand;
 import seedu.addressbook.commands.ViewCommand;
 import seedu.addressbook.data.exception.IllegalValueException;
 import seedu.addressbook.data.person.personToAdd;
+import seedu.addressbook.ui.TextUi;
 
 /**
  * Parses user input.
