@@ -62,7 +62,11 @@ public class Parser {
      */
     public static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
 
-    public Parser() {}
+    private TextUi textUi;
+
+    public Parser(TextUi textUi) {
+        this.textUi = textUi;
+    }
 
     /**
      * Parses user input into command for execution.
@@ -156,6 +160,7 @@ public class Parser {
             System.out.println("Extra arguments discarded");
         }
         personToAdd newguy = new personToAdd();
+        textUi.initializePersonToAdd(newguy);
         try {
             return new AddCommand(
                     newguy.getName(),
